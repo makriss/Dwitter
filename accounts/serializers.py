@@ -13,7 +13,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'username' : validated_data['username'],
             'password' : validated_data['password']
         }
-        print("User data:",u)
-        u = User.objects.create_user(u)
+        u = User.objects.create_user(username=u['username'],password=u['password'])
         u.save()
         return u
