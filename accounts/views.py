@@ -19,7 +19,7 @@ def RegisterUser(request):
             data["response"] = "Successfully registered"
         else:
             data = serializer.errors
-    return Response(data)
+        return Response(data)
 
 @api_view(['POST',])
 def TokenLogin(request):
@@ -29,12 +29,13 @@ def TokenLogin(request):
         password = request.POST['password']
         user = auth.authenticate(username=username,password=password)
         if user is not None:
-            try:
-                token = get_object_or_404(Token, user=user)
-                # print("Token retrieved:",token)
-            except:
-                token = Token.objects.create(user=user)
-                # print("Token created:",token)
+            # try:
+            #     token = get_object_or_404(Token, user=user)
+            #     # print("Token retrieved:",token)
+            # except:
+            #     token = Token.objects.create(user=user)
+            #     # print("Token created:",token)
+            token = Token.objects.get_or_create(user=user)
             data.update({'token':token.key})
         else:
             data.update({'msg':"Login failed!"})

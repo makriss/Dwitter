@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from api.models import User
 
 
@@ -9,10 +8,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ['username','password']
 
     def create(self, validated_data):
-        u = {
-            'username' : validated_data['username'],
-            'password' : validated_data['password']
-        }
-        u = User.objects.create_user(username=u['username'],password=u['password'])
-        u.save()
+        username = validated_data['username']
+        password = validated_data['password']
+        u = User.objects.create_user(username=username,password=password)
+        # u.save()
         return u
