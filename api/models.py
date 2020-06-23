@@ -1,9 +1,8 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 from django.db import models
-# from accounts.models import User
 from Dwitter import settings
 
-User = settings.AUTH_USER_MODEL
+User = get_user_model()
 
 # Create your models here.
 
@@ -33,13 +32,6 @@ class Comments(models.Model):
 
 class Likes(models.Model):
     dweet_id = models.ForeignKey('Dweets', on_delete=models.CASCADE)
-    # liked_by = models.TextField(verbose_name="Liked By", default="")
     liked_by = models.ForeignKey(to=User, on_delete=models.CASCADE)
     last_update = models.DateTimeField(auto_now=True)
 
-
-class Followers(models.Model):
-    user_id = models.ForeignKey(to=User, related_name="mainuser", on_delete=models.CASCADE)
-    # follower_id = models.ForeignKey(to=User, related_name="follower", on_delete=models.CASCADE)
-    followers = models.TextField(verbose_name="Follower ids", default="")
-    creation_timestamp = models.DateTimeField(auto_now_add=True)

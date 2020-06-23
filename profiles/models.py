@@ -1,0 +1,30 @@
+from django.contrib.auth import get_user_model
+from django.db import models
+
+from Dwitter import settings
+
+User = get_user_model()
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE)
+    bio = models.CharField(max_length=160, blank=True)
+    profile_photo = models.ImageField(blank=True, null=True)
+    followers = models.ManyToManyField("self", through="Relationship", related_name="follow_to",
+                                       through_fields=("user_followed", "followed_by"), symmetrical=False, blank=True)
+
+    def get_followers(self):
+        return self.followers.all()
+
+    def get_followers_count(self):
+        return self.followers.count()
+
+    # def follow(self, user_profile):
+
+
+
+class Relationship(models.Model):
+    user_followed = models.ForeignKey("Profile", related_name="followed", on_delete=models.CASCADE)
+    followed_by = models.ForeignKey("Profile", related_name="follower", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+

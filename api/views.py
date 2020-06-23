@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR, HTTP_401_UNAUTHORIZED, \
     HTTP_400_BAD_REQUEST
 
-from api.models import Dweets, Likes, Followers
+from api.models import Dweets, Likes
 from api.serializers import DweetSerializer, CommentSerializer, LikeSerializer
 
 
