@@ -16,15 +16,33 @@ class Profile(models.Model):
     def get_followers(self):
         return self.followers.all()
 
+    def get_followed_users(self):
+        return self.follow_to.all().values('user')
+
     def get_followers_count(self):
         return self.followers.count()
+
+    @staticmethod
+    def get_profile(user_object):
+        return Profile.objects.get(user=user_object)
+
+    @staticmethod
+    def get_profile_from_username(username):
+        user = User.objects.get(username=username)
+        return user.profile
+
+    def follow_user(self, to_follow_username):
+        profile = Profile.get_profile_from_username(to_follow_username)
+        rel = Relationship.objects.create(user_followed=profile,
+                                          followed_by=self)
+        return rel
 
     # def follow(self, user_profile):
 
 
-
 class Relationship(models.Model):
-    user_followed = models.ForeignKey("Profile", related_name="followed", on_delete=models.CASCADE)
-    followed_by = models.ForeignKey("Profile", related_name="follower", on_delete=models.CASCADE)
+    user_followed = models.ForeignKey("Profile", related_name="followed",
+                                      on_delete=models.CASCADE, db_column="user_followed")
+    followed_by = models.ForeignKey("Profile", related_name="follower",
+                                    on_delete=models.CASCADE, db_column="followed_by")
     timestamp = models.DateTimeField(auto_now=True)
-

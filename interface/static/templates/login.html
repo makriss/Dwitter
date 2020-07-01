@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dwitter</title>
+    <script src="{% static 'libraries/js/jquery3.5.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/bootstrap.min.css' %}">
+    <script src="{% static 'libraries/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/bootstrap-grid.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'libraries/css/bootstrap-reboot.min.css' %}">
+    <script src="{% static 'libraries/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'libraries/js/angular1.2.min.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+</head>
+<body>
+    <div class="container-fluid" id="login-container">
+        <div id="login-box">
+            <h2>Dwitter</h2>
+            <div id="login-details">
+                 <form action="login" method="post">
+                    {% csrf_token %}
+                    {{ form }}
+                    <input type="text" class="inputs-attr twitter-input" name="username" placeholder="Username" required>
+                    <br>
+                    <input type="password" class="inputs-attr twitter-input" name="password" placeholder="Password">
+                    <br>
+                    <div>
+                        <input type="submit" class="inputs-attr" value="Log In">
+                        <br>
+                        <button class="inputs-attr">Sign Up</button>
+                    </div>
+                 </form>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

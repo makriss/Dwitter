@@ -1,0 +1,17 @@
+body{background-color: rgb(66, 159, 251)}
+div#login-container{
+
+}
+div#login-box{
+    width: 505px;
+    height: 376px;
+    text-align: center;
+    margin: 40px auto;
+    background-color: white
+}
+.twitter-input{
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid;
+    background-color: rgba(85, 170, 255, 0.2);
+}

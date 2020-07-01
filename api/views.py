@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
@@ -11,6 +12,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_500_INTERN
 
 from api.models import Dweets, Likes
 from api.serializers import DweetSerializer, CommentSerializer, LikeSerializer
+from profiles.models import Profile
 
 
 @api_view(['POST', ])
@@ -60,16 +62,16 @@ def edit_dweet(request):
 
         return Response(response_object)
 
+
 # @api_view(['POST', ])
 # @permission_classes([IsAuthenticated])
 def get_dweet(request):
     try:
         dweet = get_object_or_404(Dweets, id=request.data['dweet_id'])
     except Http404:
-        print("No Dweet exist with dweet id:",request.data['dweet_id'])
+        print("No Dweet exist with dweet id:", request.data['dweet_id'])
         dweet = False
     return Response(dweet)
-
 
 
 @api_view(['POST', ])
@@ -105,13 +107,13 @@ def like_dweet(request):
     :return: <Dictionary> {likes_count<int>, current_user_liked<Boolean>}
     """
 
-
+    # request_dweet_object = {"dweet_id": request.data}
     like_serializer = LikeSerializer(data=request.data)
     if like_serializer.is_valid():
         like_object = like_serializer.save(user_id=request.user)
     else:
         like_serializer.errors
-        print("-----------Errors-----------",like_serializer.errors)
+        print("-----------Errors-----------", like_serializer.errors)
 
     return Response(like_object)
 
@@ -156,9 +158,6 @@ def follow_user(request):
     return Response({"is_follower": is_follower, "likes_count": likes_count})
 
 
-def get_user(request):
-    pass
-
 def success_object(status, msg, msg_data):
     return {'status': status, msg: msg_data}
 
@@ -166,31 +165,30 @@ def success_object(status, msg, msg_data):
 def failed_object(status, msg_data):
     return {'status': status, "msg": msg_data}
 
-
 # Old code from like_dweet function
 # user_id = str(request.user.id)
-    # try:
-    #     liked_object = get_object_or_404(Likes, dweet_id=request.data['dweet_id'])
-    #     liked_list = liked_object.liked_by
-    #
-    #     liked_list = liked_list.split(',')
-    #     if user_id in liked_list:
-    #         liked_list.remove(user_id)
-    #         current_user_liked = False
-    #     else:
-    #         liked_list.append(user_id)
-    #         current_user_liked = True
-    # except Http404:
-    #     dweet = get_dweet(request)
-    #     liked_object = Likes.objects.create(dweet_id=dweet.data)
-    #     liked_list = [user_id]
-    #     current_user_liked = True
-    #
-    # likes_count = len(liked_list)
-    # if not len(liked_list):
-    #     liked_object.delete()  # removing dweet table entry if no likes
-    #     current_user_liked = False
-    # else:
-    #     liked_list = ",".join(liked_list)
-    #     liked_object.liked_by = liked_list
-    #     liked_object.save()
+# try:
+#     liked_object = get_object_or_404(Likes, dweet_id=request.data['dweet_id'])
+#     liked_list = liked_object.liked_by
+#
+#     liked_list = liked_list.split(',')
+#     if user_id in liked_list:
+#         liked_list.remove(user_id)
+#         current_user_liked = False
+#     else:
+#         liked_list.append(user_id)
+#         current_user_liked = True
+# except Http404:
+#     dweet = get_dweet(request)
+#     liked_object = Likes.objects.create(dweet_id=dweet.data)
+#     liked_list = [user_id]
+#     current_user_liked = True
+#
+# likes_count = len(liked_list)
+# if not len(liked_list):
+#     liked_object.delete()  # removing dweet table entry if no likes
+#     current_user_liked = False
+# else:
+#     liked_list = ",".join(liked_list)
+#     liked_object.liked_by = liked_list
+#     liked_object.save()

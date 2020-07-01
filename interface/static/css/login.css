@@ -1,0 +1,35 @@
+body{background-color: rgb(66, 159, 251)}
+div#login-container{
+
+}
+div#login-box{
+    width: 505px;
+    height: 376px;
+    text-align: center;
+    margin: 40px auto;
+    background-color: white;
+    border-radius: 20px;
+}
+div#login-details{
+    margin: 40px 80px
+}
+.twitter-input{
+    height: 2em;
+    border-style: none;
+    background-color: rgba(85, 170, 255, 0.2);
+}
+.inputs-attr{
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 15px;
+}
+div#login-details>div{margin-top: 50px;}
+div#login-details>div>input{
+    background-color: white;
+    border: 1px solid rgb(147, 215, 255);
+}
+div#login-details>div>button{
+    background-color: rgb(66, 159, 251);
+    color: white;
+    border-style: none;
+}

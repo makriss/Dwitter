@@ -4,7 +4,10 @@ from accounts import views
 from rest_framework.authtoken import views as v
 
 urlpatterns = [
-   path('register',views.RegisterUser,name="register"),
-   path('login',views.TokenLogin,name="login"),
-   path('fetch-token',v.obtain_auth_token,name="get_token")
+    path('register', views.RegisterUser, name="register"),
+    path('token_login', views.TokenLogin, name="token_login"),
+    path('fetch-token', v.obtain_auth_token, name="get_token"),
+    path('login', views.login_user, name="login_user"),
+    path('logout', views.logout_user, name="user_logout"),
+
 ]

@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+<div ng-controller="dwitterCtrl" id="homepage-div">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <img src="{% static 'images/dwitter_favicon.png' %}" height="42" width="42">
+            </div>
+            <div class="col-6">
+<!--                <div id="search-box-div">-->
+<!--                  <label class="sr-only">Search Dwitter</label>-->
+<!--                  <div class="input-group mb-2">-->
+<!--                    <div class="input-group-prepend">-->
+<!--                      <div class="input-group-text sky-back">-->
+<!--                          <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <input type="text" class="form-control sky-back search-box" placeholder="Search Dwitter">-->
+<!--                  </div>-->
+<!--                </div>-->
+                <div id="search-box-div">
+                    <div><img src='libraries/octicons/icons/mention-16.svg' alt="icon name"></div>
+                    <div><input type="text" class="sky-back search-box" placeholder="Search Dwitter"></div>
+                </div>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <nav class="menu-navigation">
+                    <a class="options-menu-item" ng-repeat="option in optionsMenu">
+                        <div>
+                            <img ng-src="libraries/octicons/icons/[[option.icon]]-24.svg" alt={{option.icon}}>
+                            &nbsp; <span ng-bind="option.name"></span>
+                        </div>
+                    </a>
+                </nav>
+            </div>
+            <div class="col-6">
+                <dweet ng-repeat="dweet in dweetsFeed" data="dweet"></dweet>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

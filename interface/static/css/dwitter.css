@@ -1,0 +1,50 @@
+div#homepage-div{
+    font-size: 1em;
+    font-family: helvetica;
+    padding-top: 10px;
+}
+div#homepage-div>div:first-child{
+    margin-bottom: 10px;
+}
+.border-radius{ border-radius: 20px;}
+.sky-back { background-color: rgb(29,161,242,0.1); }
+.search-box {
+    border: none;
+
+}
+.input-group-text{ border: none}
+#search-box-div div.input-group-text{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+#search-box-div>div{
+    display: inline-block;
+
+}
+#search-box-div input{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+.options-menu-item{
+    font-size: 1.2em;
+    /*margin-bottom: 1.2em;*/
+}
+nav.menu-navigation {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: stretch;
+    align-content: flex-start;
+}
+nav.menu-navigation div{
+    width: fit-content;
+    padding: 0.7em 1.2em;
+    transition: background-color 0.2s;
+    border-top-left-radius: 2.1em;
+    border-bottom-left-radius: 2.1em;
+    border-top-right-radius: 2.1em;
+    border-bottom-right-radius: 2.1em;
+}
+nav.menu-navigation div:hover{
+    background-color: rgb(29,161,242,0.1);
+    color: rgb(29,161,242,1.0);
+}

@@ -1,0 +1,113 @@
+---
+title: React
+status: Stable
+source: 'https://github.com/primer/octicons/tree/master/lib/octicons_react'
+---
+
+[![npm version](https://img.shields.io/npm/v/@primer/octicons-react.svg)](https://www.npmjs.org/package/@primer/octicons-react)
+
+## Install
+
+```shell
+npm install @primer/octicons-react
+```
+
+## Usage
+
+### Icons
+The `@primer/octicons-react` module exports individual icons as [named
+exports](https://ponyfoo.com/articles/es6-modules-in-depth#named-exports). This
+allows you to import only the icons that you need without blowing up your
+bundle:
+
+```jsx
+import React from 'react'
+import {BeakerIcon, ZapIcon} from '@primer/octicons-react'
+
+export default function Icon({boom}) {
+  return boom ? <ZapIcon /> : <BeakerIcon />
+}
+```
+
+If you were to compile this example with a tool that supports [tree-shaking][]
+(such as Webpack, Rollup, or Parcel) the resulting bundle would only include
+the "zap" and "beaker" icons.
+
+### Vertical alignment
+By default the octicons have `vertical-align: text-bottom;` applied as inline
+styles. You can change the alignment via the `verticalAlign` prop, which can be
+either `middle`, `text-bottom`, `text-top`, or `top`.
+
+```js
+import {RepoIcon} from '@primer/octicons-react'
+
+export default () => (
+  <h1>
+    <RepoIcon verticalAlign='middle' /> github/github
+  </h1>
+)
+```
+
+
+### `aria-label`
+You have the option of adding accessibility information to the icon with the
+[`aria-label` attribute][aria-label] via the `aria-label` prop.
+
+```js
+// Example usage
+import {PlusIcon} from '@primer/octicons-react'
+
+export default () => (
+  <button>
+    <PlusIcon aria-label="Add new item" /> New
+  </button>
+)
+```
+
+
+### Sizes
+The `size` prop takes `small`, `medium`, and `large` values that can be used to
+render octicons at standard sizes:
+
+| Prop | Rendered Size |
+| :- | :- |
+| `size='small'` | 16px height by `computed` width |
+| `size='medium'` | 32px height by `computed` width |
+| `size='large'` | 64px height by `computed` width |
+
+```js
+// Example usage
+import {LogoGithubIcon} from '@primer/octicons-react'
+
+export default () => (
+  <h1>
+    <a href='https://github.com'>
+      <LogoGithubIcon size='large' aria-label='GitHub'/>
+    </a>
+  </h1>
+)
+```
+
+### `Octicon` (DEPRECATED)
+
+> ⚠️ The `Octicon` component is deprecated. Use icon components on their own instead:
+> ```diff
+- <Octicon icon={AlertIcon} />
++ <AlertIcon />
+```
+
+The `Octicon` component is wrapper that passes props to its icon component. To render a specific icon, you
+can pass it either via the `icon` prop, or as the only child:
+
+```jsx
+<Octicon icon={Icon} />
+<Octicon><Icon x={10}/></Octicon>
+```
+
+[octicons]: https://octicons.github.com/
+[primer]: https://github.com/primer/primer
+[docs]: http://primercss.io/
+[npm]: https://www.npmjs.com/
+[install-npm]: https://docs.npmjs.com/getting-started/installing-node
+[tree-shaking]: https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking
+[aria-label]: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-label_attribute
