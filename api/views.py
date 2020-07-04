@@ -22,7 +22,7 @@ def add_dweet(request):
     response_object = {}
     if request.method == "POST":
         # request.data.user_id = request.user.pk
-        dweet_serializer = DweetSerializer(data=request.data, context=request.user)
+        dweet_serializer = DweetSerializer(data=request.data)
         if dweet_serializer.is_valid():
             dweet_object = dweet_serializer.save(user_id=request.user)
             dweet = {'id': dweet_object.id, 'dweet': dweet_object.dweet}

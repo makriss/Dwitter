@@ -24,3 +24,7 @@ div.icon-box>img:hover{
     vertical-align: middle;
     margin-left: 5px;
 }
+.svg-red-heart{
+    filter: invert(25%) sepia(63%) saturate(5646%)
+        hue-rotate(329deg) brightness(92%) contrast(90%);
+}

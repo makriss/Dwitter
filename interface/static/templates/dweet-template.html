@@ -20,7 +20,7 @@
             </div>
             <div class="icon-box">
                 <img ng-if="!dweetObj.current_user_liked" src='libraries/octicons/icons/heart-16.svg' ng-click="likeDweet(dweetObj.id)" alt="like">
-                <img ng-if="dweetObj.current_user_liked" src='libraries/octicons/icons/heart-fill-16.svg' ng-click="likeDweet(dweetObj.id)" alt="like">
+                <img ng-if="dweetObj.current_user_liked" class="svg-red-heart" src='libraries/octicons/icons/heart-fill-16.svg' ng-click="likeDweet(dweetObj.id)" alt="like">
                 <span class="figure-span" ng-bind="dweetObj.likes_count || ''"></span>
             </div>
         </div>

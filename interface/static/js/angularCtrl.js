@@ -12,22 +12,33 @@ app.config(function($interpolateProvider, $httpProvider){
 
 app.controller('dwitterCtrl', ['$scope','menuItems','restApi', function(scope,menuItems,restApi){
     window.scope = scope;
-    scope.sampleDweet = {
-                "full_name" : "Mayank Shrivastava",
-                "username" : "makriss",
-                "posted_when" : "10 min",
-                "dweet": "Kya baat hai"
-            }
+    scope.DWEET_CHAR_LIMIT = 140;
 
+    // loading side menu options
     scope.optionsMenu = menuItems()
-//    restApi.likeDweet(13)
-    // Move to sending promises from present structure
+
+    // Refactor to sending promises from present structure
     // https://stackoverflow.com/questions/20555472/can-you-resolve-an-angularjs-promise-before-you-return-it
-    restApi.getFeed().then(function(response){
-                scope.dweetsFeed = response.data;
+    function loadFeeds(){
+        restApi.getFeed().then(function(response){
+                    scope.dweetsFeed = response.data;
+                }, function(response){
+                    console.error(response)
+                })
+    }
+    loadFeeds()
+
+    scope.postDweet = function(dweet){
+        if (!dweet.length)
+            return;
+
+        restApi.postDweet(dweet).then(function(response){
+                loadFeeds()
+                $("#addDweetModal").modal('hide')
             }, function(response){
                 console.error(response)
             })
+    }
 
 }])
 

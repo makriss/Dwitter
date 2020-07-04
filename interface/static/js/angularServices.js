@@ -21,15 +21,19 @@ app.directive('dweet', function(restApi){
 app.factory('restApi', function($http){
     function likeDweet(dweet_id){
          return $http.post('/api/like-dweet', {'dweet_id': dweet_id})
-
     }
 
     function getHomepageFeed(){
         return $http.post('/get-feed')
-
     }
+
+    function postDweet(dweet){
+        return $http.post('/api/post-dweet', {'dweet': dweet})
+    }
+
     return {
         likeDweet : likeDweet,
-        getFeed : getHomepageFeed
+        getFeed : getHomepageFeed,
+        postDweet : postDweet
     }
 })

@@ -3,14 +3,15 @@ div#homepage-div{
     font-family: helvetica;
     padding-top: 10px;
 }
+.f_r { float: right; }
 div#homepage-div>div:first-child{
     margin-bottom: 10px;
 }
 .border-radius{ border-radius: 20px;}
 .sky-back { background-color: rgb(29,161,242,0.1); }
+.dark-sky-back { background-color: rgb(29,161,242,1); }
 .search-box {
     border: none;
-
 }
 .input-group-text{ border: none}
 #search-box-div div.input-group-text{
@@ -19,7 +20,6 @@ div#homepage-div>div:first-child{
 }
 #search-box-div>div{
     display: inline-block;
-
 }
 #search-box-div input{
     border-top-right-radius: 20px;
@@ -36,7 +36,6 @@ nav.menu-navigation {
     align-content: flex-start;
 }
 nav.menu-navigation div{
-    width: fit-content;
     padding: 0.7em 1.2em;
     transition: background-color 0.2s;
     border-top-left-radius: 2.1em;
@@ -48,3 +47,14 @@ nav.menu-navigation div:hover{
     background-color: rgb(29,161,242,0.1);
     color: rgb(29,161,242,1.0);
 }
+.dweet-btn{
+    text-align: center;
+    color: white;
+}
+.c-w{color: white;}
+.m_t{margin-top: 20px;}
+#modal-dweet-box {
+    width: 100%;
+    border-style: none;
+}
+#addDweetModal .modal-footer{ border-top: none; }

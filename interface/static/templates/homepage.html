@@ -32,11 +32,16 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
-                <nav class="menu-navigation">
+                <nav class="menu-navigation f_r">
                     <a class="options-menu-item" ng-repeat="option in optionsMenu">
                         <div>
                             <img ng-src="libraries/octicons/icons/[[option.icon]]-24.svg" alt={{option.icon}}>
                             &nbsp; <span ng-bind="option.name"></span>
+                        </div>
+                    </a>
+                    <a class="m_t" data-toggle="modal" data-target="#addDweetModal">
+                        <div class="dark-sky-back dweet-btn">
+                            <span>Dweet</span>
                         </div>
                     </a>
                 </nav>
@@ -48,5 +53,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Add Dweet Modal -->
+    <div ng-include="'templates/add_dweet_modal.html'"></div>
+
+    <div class="modal fade" id="commentDweetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content border-radius">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea ng-model="draftDweet" maxlength="DWEET_CHAR_LIMIT" id="modal-dweet-box" name="dweet" rows="5" cols="33" placeholder="What's happening?"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button ng-click="postDweet(draftDweet)" type="button" class="btn dark-sky-back border-radius c-w" ng-disabled="!draftDweet.length">Dweet</button>
+          </div>
+        </div>
+       </div>
+    </div>
+
+</div>
+
 </div>
 {% endblock %}

@@ -21,7 +21,9 @@ def landing_page(request):
 @api_view(['POST', ])
 @permission_classes([IsAuthenticated])
 def get_homepage_feed(request):
-    users_followed = Profile.get_profile(request.user.id).get_followed_users()
+    # users_followed = Profile.get_profile(request.user.id).get_followed_users()
+    u = Profile.get_profile(request.user.id)
+    users_followed = u.follow_to.all().values('user') | Profile.objects.filter(user=u.user).values("user")
     current_user_liked_query = Likes.objects.filter(
         dweet_id=OuterRef('pk'), liked_by=request.user
     )
