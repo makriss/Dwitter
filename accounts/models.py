@@ -10,9 +10,6 @@ class User(AbstractUser):
     def __str__(self):
         return self.first_name + " " + self.last_name + " ({})".format(self.username)
 
-    def firstName(self):
-        return self.first_name
-
     @property
-    def lastName(self):
-        return self.last_name
+    def full_name(self):
+        return self.first_name + ' ' + self.last_name

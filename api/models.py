@@ -2,12 +2,12 @@ from datetime import datetime, timezone
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import F
+
 from Dwitter import settings
+from utility.functions import get_time_difference
 
 User = get_user_model()
-
-
-# Create your models here.
 
 
 class Dweets(models.Model):
@@ -21,24 +21,14 @@ class Dweets(models.Model):
     def __str__(self):
         return self.dweet
 
-    def get_time_difference(self):
-        difference = datetime.now(timezone.utc) - self.creation_timestamp
-        if difference.days:
-            return str(difference.days) + ' days'
-        else:
-            hours = difference.seconds / (60 * 60)
-            if hours > 1:
-                return str(hours) + ' hours'
-            else:
-                minutes = difference.seconds / 60
-                if minutes > 1:
-                    return str(minutes) + ' minutes'
-
-        return str(difference.seconds) + ' seconds'
-
     @property
-    def time_property(self):
-        return self.get_time_difference()
+    def get_readable_time(self):
+        return get_time_difference(self.creation_timestamp)
+
+    @staticmethod
+    def get_dweets_of_user(username):
+        return Dweets.objects.filter(user_id__username=username)\
+            .order_by('-creation_timestamp')
 
 
 class Comments(models.Model):
@@ -51,8 +41,16 @@ class Comments(models.Model):
     def __str__(self):
         return self.comment
 
+    def getCountForComment(self):
+        return Comments.objects.filter(dweet_id=self.dweet_id).count()
+
 
 class Likes(models.Model):
     dweet_id = models.ForeignKey('Dweets', on_delete=models.CASCADE, db_column="dweet_id")
     liked_by = models.ForeignKey(to=User, on_delete=models.CASCADE)
     last_update = models.DateTimeField(auto_now=True)
+
+    @staticmethod
+    def get_liked_dweets_of_user(username):
+        return Likes.objects.filter(liked_by__username=username)\
+            .annotate(dweet=F("dweet_id__dweet")).order_by('-last_update')

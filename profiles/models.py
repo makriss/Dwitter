@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from Dwitter import settings
@@ -19,6 +20,14 @@ class Profile(models.Model):
     def get_followed_users(self):
         return self.follow_to.all().values('user')
 
+    def check_if_following(self, username):
+        try:
+            following_user = self.follow_to.get(user__username=username)
+        except ObjectDoesNotExist:
+            following_user = False
+
+        return following_user
+
     def get_followers_count(self):
         return self.followers.count()
 
@@ -33,8 +42,16 @@ class Profile(models.Model):
 
     def follow_user(self, to_follow_username):
         profile = Profile.get_profile_from_username(to_follow_username)
-        rel = Relationship.objects.create(user_followed=profile,
-                                          followed_by=self)
+        try:
+            rel = Relationship.objects.create(user_followed=profile,
+                                              followed_by=self)
+            rel = True
+        except Exception as e:
+            rel = Relationship.objects.get(user_followed=profile,
+                                           followed_by=self)
+            rel.delete()
+            rel = False
+
         return rel
 
     # def follow(self, user_profile):
@@ -46,3 +63,9 @@ class Relationship(models.Model):
     followed_by = models.ForeignKey("Profile", related_name="follower",
                                     on_delete=models.CASCADE, db_column="followed_by")
     timestamp = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user_followed", "followed_by"],
+                                    name="single follow")
+        ]

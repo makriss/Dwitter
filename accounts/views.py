@@ -67,7 +67,8 @@ def login_user(request):
 
     return render(request, "login.html")
 
-@api_view(['POST','GET'])
+
+@api_view(['POST', 'GET'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
     logout(request)

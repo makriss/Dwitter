@@ -2,7 +2,8 @@ app.directive('dweet', function(restApi){
     return {
         restrict: 'E',
         scope: {
-            dweetObj: '=data'
+            dweetObj: '=data',
+            comment: '&commentWindow'
         },
         templateUrl: 'templates/dweet-template.html',
         link: function(scope, element, attrs) {
@@ -31,9 +32,29 @@ app.factory('restApi', function($http){
         return $http.post('/api/post-dweet', {'dweet': dweet})
     }
 
+    function commentOnDweet(dweetId, comment){
+        return $http.post('/api/post-comment', {'dweet_id': dweetId, "comment": comment})
+    }
+
+    function commentsViewData(url){
+        return $http.post(url)
+    }
+
+    function getUserProfile(url){
+        return $http.post(url)
+    }
+
+    function followUser(username){
+        return $http.post('/profile/follow-user',{'follow_username':username})
+    }
+
     return {
         likeDweet : likeDweet,
         getFeed : getHomepageFeed,
-        postDweet : postDweet
+        postDweet : postDweet,
+        comment: commentOnDweet,
+        commentsView: commentsViewData,
+        getUserProfile: getUserProfile,
+        followUser: followUser
     }
 })

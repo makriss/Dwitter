@@ -3,7 +3,6 @@ div#homepage-div{
     font-family: helvetica;
     padding-top: 10px;
 }
-.f_r { float: right; }
 div#homepage-div>div:first-child{
     margin-bottom: 10px;
 }
@@ -43,18 +42,41 @@ nav.menu-navigation div{
     border-top-right-radius: 2.1em;
     border-bottom-right-radius: 2.1em;
 }
+.div-round-border{
+    border-top-left-radius: 2.1em;
+    border-bottom-left-radius: 2.1em;
+    border-top-right-radius: 2.1em;
+    border-bottom-right-radius: 2.1em;
+}
 nav.menu-navigation div:hover{
     background-color: rgb(29,161,242,0.1);
     color: rgb(29,161,242,1.0);
 }
+nav.menu-navigation a:hover{text-decoration: none;}
 .dweet-btn{
     text-align: center;
     color: white;
 }
 .c-w{color: white;}
+.c-b{color: rgb(29,161,242,1);}
 .m_t{margin-top: 20px;}
+.f_r { float: right; }
+.i_b {display: inline-block;}
+.bo_bo {border-bottom: 1px #e8f5f6 solid;}
+.bo_blue{border: 1px solid rgb(29,161,242,1.0);}
+.pad_1{ padding: 15px 5px;}
+.pad_2 {padding: 15px;}
+.pad-3 {padding: 5px 15px;}
+.v_a{vertical-align: text-bottom;}
+.f-bold {font-weight: bold;}
+
+.dweet_font{
+    font-size: 1.6em;
+    font-stretch: 100%;
+}
 #modal-dweet-box {
     width: 100%;
     border-style: none;
 }
 #addDweetModal .modal-footer{ border-top: none; }
+.blue-border {border: 2px solid #e8f5f6; }

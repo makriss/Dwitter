@@ -2,57 +2,9 @@
 {% load static %}
 
 {% block content %}
-<div ng-controller="dwitterCtrl" id="homepage-div">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <img src="{% static 'images/dwitter_favicon.png' %}" height="42" width="42">
-            </div>
-            <div class="col-6">
-<!--                <div id="search-box-div">-->
-<!--                  <label class="sr-only">Search Dwitter</label>-->
-<!--                  <div class="input-group mb-2">-->
-<!--                    <div class="input-group-prepend">-->
-<!--                      <div class="input-group-text sky-back">-->
-<!--                          <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                    <input type="text" class="form-control sky-back search-box" placeholder="Search Dwitter">-->
-<!--                  </div>-->
-<!--                </div>-->
-                <div id="search-box-div">
-                    <div><img src='libraries/octicons/icons/mention-16.svg' alt="icon name"></div>
-                    <div><input type="text" class="sky-back search-box" placeholder="Search Dwitter"></div>
-                </div>
-            </div>
-            <div class="col">
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <nav class="menu-navigation f_r">
-                    <a class="options-menu-item" ng-repeat="option in optionsMenu">
-                        <div>
-                            <img ng-src="libraries/octicons/icons/[[option.icon]]-24.svg" alt={{option.icon}}>
-                            &nbsp; <span ng-bind="option.name"></span>
-                        </div>
-                    </a>
-                    <a class="m_t" data-toggle="modal" data-target="#addDweetModal">
-                        <div class="dark-sky-back dweet-btn">
-                            <span>Dweet</span>
-                        </div>
-                    </a>
-                </nav>
-            </div>
-            <div class="col-6">
-                <dweet ng-repeat="dweet in dweetsFeed" data="dweet"></dweet>
-            </div>
-            <div class="col">
-            </div>
-        </div>
-    </div>
+    <div ng-init="homepageInit()">
+    <dweet ng-repeat="df in dweetsFeed" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
+
 
     <!-- Add Dweet Modal -->
     <div ng-include="'templates/add_dweet_modal.html'"></div>
@@ -61,22 +13,27 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content border-radius">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"></h5>
+            <h5 class="modal-title" id="commentDweetModalLabel"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            <textarea ng-model="draftDweet" maxlength="DWEET_CHAR_LIMIT" id="modal-dweet-box" name="dweet" rows="5" cols="33" placeholder="What's happening?"></textarea>
+            <div ng-include="'templates/dweet-msg-template.html'"></div>
+              <div class="font-light">Replying to
+                  <span class="font-light">
+                    <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+                    <span ng-bind="dweetObj.username"></span>
+                </span> &nbsp;
+              </div>
+            <textarea ng-model="draftComment" maxlength="DWEET_CHAR_LIMIT" id="modal-dweet-box" name="dweet" rows="5" cols="33" placeholder="Dweet your reply"></textarea>
           </div>
           <div class="modal-footer">
-            <button ng-click="postDweet(draftDweet)" type="button" class="btn dark-sky-back border-radius c-w" ng-disabled="!draftDweet.length">Dweet</button>
+            <button ng-click="commentOnDweet(dweetObj, draftComment)" type="button" class="btn dark-sky-back border-radius c-w" ng-disabled="!draftComment.length">Reply</button>
           </div>
         </div>
        </div>
     </div>
+    </div>
 
-</div>
-
-</div>
 {% endblock %}

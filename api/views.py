@@ -13,6 +13,7 @@ from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_500_INTERN
 from api.models import Dweets, Likes
 from api.serializers import DweetSerializer, CommentSerializer, LikeSerializer
 from profiles.models import Profile
+from utility.functions import get_time_difference, failed_object
 
 
 @api_view(['POST', ])
@@ -82,10 +83,21 @@ def add_comment(request):
         serializer = CommentSerializer(data=request.data)
         if serializer.is_valid():
             comment = serializer.save(user_id=request.user)
-            response_object = success_object(
-                HTTP_201_CREATED, "comment",
-                {"id": comment.id, "dweet_id": comment.dweet_id.id, "comment": comment.comment}
-            )
+            count = comment.getCountForComment()
+            comment.creation_timestamp = get_time_difference(comment.creation_timestamp)
+            c = comment.__dict__
+            comment_data = {
+                "id": comment.id,
+                "comment": comment.comment,
+                "username": comment.user_id.username,
+                "fullname": comment.user_id.full_name,
+                "creation_timestamp": comment.creation_timestamp
+            }
+            response_object = {
+                "status": HTTP_201_CREATED,
+                "total_comments": count,
+                "comment": comment_data
+            }
         else:
             response_object = failed_object(HTTP_400_BAD_REQUEST, serializer.errors)
     return Response(response_object)
@@ -158,37 +170,3 @@ def follow_user(request):
     return Response({"is_follower": is_follower, "likes_count": likes_count})
 
 
-def success_object(status, msg, msg_data):
-    return {'status': status, msg: msg_data}
-
-
-def failed_object(status, msg_data):
-    return {'status': status, "msg": msg_data}
-
-# Old code from like_dweet function
-# user_id = str(request.user.id)
-# try:
-#     liked_object = get_object_or_404(Likes, dweet_id=request.data['dweet_id'])
-#     liked_list = liked_object.liked_by
-#
-#     liked_list = liked_list.split(',')
-#     if user_id in liked_list:
-#         liked_list.remove(user_id)
-#         current_user_liked = False
-#     else:
-#         liked_list.append(user_id)
-#         current_user_liked = True
-# except Http404:
-#     dweet = get_dweet(request)
-#     liked_object = Likes.objects.create(dweet_id=dweet.data)
-#     liked_list = [user_id]
-#     current_user_liked = True
-#
-# likes_count = len(liked_list)
-# if not len(liked_list):
-#     liked_object.delete()  # removing dweet table entry if no likes
-#     current_user_liked = False
-# else:
-#     liked_list = ",".join(liked_list)
-#     liked_object.liked_by = liked_list
-#     liked_object.save()
