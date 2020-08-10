@@ -1,11 +1,10 @@
 var app = angular.module('dwitterAngularModule',[]);
 
 app.config(function($interpolateProvider, $httpProvider){
-    // $interpolateProvider.startSymbol("[[[");
-    // $interpolateProvider.endSymbol("]]]");
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
     $httpProvider.defaults.xsrfCookieName=  "csrftoken";
     $httpProvider.defaults.xsrfHeaderName=  "X-CSRFToken";
+
 });
 
 
@@ -13,6 +12,14 @@ app.config(function($interpolateProvider, $httpProvider){
 app.controller('dwitterCtrl', ['$scope','menuItems','restApi','$window', function(scope,menuItems,restApi,$window){
     window.scope = scope;
     scope.DWEET_CHAR_LIMIT = 140;
+    scope.currentUser = {}
+    console.log("ROARING......")
+    restApi.getCurrentUser().then(function(response){
+                    scope.currentUser = response.data;
+                    scope.menuItems = menuItems(scope.currentUser.username)
+                }, function(response){
+                    console.error(response)
+                })
 
     // loading side menu options
     scope.optionsMenu = menuItems()
@@ -156,10 +163,10 @@ app.controller('profileCtrl', ['$scope','restApi','$window', function(scope, res
 }])
 
 
-app.constant('menuItems', function(){
+app.constant('menuItems', function(username){
     return [
-        {"name": "Home", "icon":"home", "url":"home:homepage"},
-        {"name":"Bookmarks", "icon":"bookmark"},
-        {"name":"Profile", "icon":"person"}
+        {"name": "Home", "icon":"home", "url":"/home"},
+        {"name":"Bookmarks", "icon":"bookmark", "url":"#"},
+        {"name":"Profile", "icon":"person", "url": "/profile/"+username}
     ]
 })

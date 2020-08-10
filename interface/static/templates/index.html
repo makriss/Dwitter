@@ -49,34 +49,46 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col">
+            <div class="col-2">
                 <nav class="menu-navigation">
-                    <a class="options-menu-item" ng-href="{% url 'home:homepage' %}">
-                        <div>
-                            <img ng-src="libraries/octicons/icons/home-24.svg" alt=home>
+<!--                    <a class="options-menu-item" ng-repeat="item in menuItems" ng-href="[[item.url]]">-->
+<!--                        <div class="nav_pad">-->
+<!--                            <img ng-src="libraries/octicons/icons/[[item.icon]]-24.svg" alt=[[item.name]]>-->
+<!--                            &nbsp; <span ng-bind="item.name"></span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+                    <a class="options-menu-item" href="/home">
+                        <div class="nav_pad">
+                            <img ng-src="libraries/octicons/icons/home-24.svg" alt="home">
                             &nbsp; <span>Home</span>
                         </div>
                     </a>
-                    <a class="options-menu-item" href="{% url 'home:homepage' %}">
-                        <div>
-                            <img ng-src="libraries/octicons/icons/bookmark-24.svg" alt=bookmark>
+                    <a class="options-menu-item">
+                        <div class="nav_pad">
+                            <img ng-src="libraries/octicons/icons/bookmark-24.svg" alt="bookmark">
                             &nbsp; <span>Bookmark</span>
                         </div>
                     </a>
-                    <a class="options-menu-item" ng-href="{% url 'home:homepage' %}">
-                        <div>
-                            <img ng-src="libraries/octicons/icons/person-24.svg" alt=person>
+                    <a class="options-menu-item" ng-href="/profile/[[currentUser.username]]">
+                        <div class="nav_pad">
+                            <img ng-src="libraries/octicons/icons/person-24.svg" alt="person">
                             &nbsp; <span>Profile</span>
                         </div>
                     </a>
                     <a class="m_t" data-toggle="modal" data-target="#addDweetModal">
-                        <div class="dark-sky-back dweet-btn">
+                        <div class="dark-sky-back dweet-btn nav_pad">
                             <span>Dweet</span>
                         </div>
                     </a>
                 </nav>
+
+                <logout-popup data="currentUser"></logout-popup>
+
+
+
             </div>
-            <div class="col-6">
+<!--            <div class="col"></div>-->
+            <div class="col-6 offset-1">
                 {% block content %}
 
                 {% endblock %}

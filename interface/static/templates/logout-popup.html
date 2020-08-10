@@ -1,0 +1,33 @@
+<div class="nav_pad" ng-click = "togglePopup()" id="current-user-info-holder"> <!-- Logged in user info -->
+    <div class="i_b"><!--profile image--></div>
+    <div class="i_b">
+        <div ng-bind="currentUser.fullname"></div>
+        <div class="font-light">
+            <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+            <span ng-bind="currentUser.username"></span>
+        </div>
+    </div>
+    <div class="i_b">
+        <img src='libraries/octicons/icons/chevron-up-16.svg' alt="icon name">
+    </div>
+</div>
+
+<div id="chevron-user-logout" ng-hide="!showPopup">
+    <div class="nav_pad pad-3"> <!-- Logged in user info -->
+        <div class="i_b"><!--profile image--></div>
+        <div class="i_b">
+            <div ng-bind="currentUser.fullname"></div>
+            <div class="font-light">
+                <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+                <span ng-bind="currentUser.username"></span>
+            </div>
+        </div>
+    </div>
+    <div class="pad-3">
+        <a  href="/accounts/logout">
+            Log out
+            <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+            <span ng-bind="currentUser.username"></span>
+        </a>
+    </div>
+</div>

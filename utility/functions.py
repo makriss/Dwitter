@@ -1,5 +1,7 @@
 from datetime import datetime, timezone
 
+from django.db import connection
+
 
 def get_time_difference(timestamp):
     difference = datetime.now(timezone.utc) - timestamp
@@ -24,3 +26,16 @@ def success_object(status, msg, msg_data):
 def failed_object(status, msg_data):
     return {'status': status, "msg": msg_data}
 
+
+def dict_fetch_all(query):
+    "Return all rows from a cursor as a dict"
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        if len(rows):
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row))for row in rows]
+        else:
+            results = {}
+
+    return results

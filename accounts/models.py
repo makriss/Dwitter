@@ -11,5 +11,5 @@ class User(AbstractUser):
         return self.first_name + " " + self.last_name + " ({})".format(self.username)
 
     @property
-    def full_name(self):
+    def fullname(self):
         return self.first_name + ' ' + self.last_name

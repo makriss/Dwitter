@@ -19,7 +19,56 @@ app.directive('dweet', function(restApi){
     }
 })
 
+app.directive('logoutPopup', function(restApi, $http){
+    return {
+        restrict: 'E',
+        scope: {
+            currentUser: '=data'
+//            comment: '&commentWindow'
+        },
+        templateUrl: 'templates/logout-popup.html',
+        link: function(scope, elm, attrs) {
+            console.log(elm.children()[1])
+
+            scope.showPopup = false;
+
+            scope.togglePopup = function(){
+
+                if (!scope.showPopup){
+                    scope.showPopup = true;
+                    parent = $(elm.children()[0]);
+                    popup = $(elm.children()[1]);
+//                    popup.css(
+//                        { top: parent.offset().top - parent.height() - 10 },
+//                        { left: parent.offset().left  }
+//                    )
+                    console.log(parent.outerHeight());
+                    popup.css('bottom', parent.outerHeight());
+                }
+                    else
+                        scope.showPopup = false;
+
+
+
+            }
+
+
+            scope.logoutUser = function(){
+                $http.post('/accounts/logout').then(function(result){
+                    console.log(result);
+                })
+            }
+
+
+        }
+    }
+})
+
 app.factory('restApi', function($http){
+    function getCurrentUser(){
+         return $http.get('/accounts/current_user')
+    }
+
     function likeDweet(dweet_id){
          return $http.post('/api/like-dweet', {'dweet_id': dweet_id})
     }
@@ -49,6 +98,7 @@ app.factory('restApi', function($http){
     }
 
     return {
+        getCurrentUser: getCurrentUser,
         likeDweet : likeDweet,
         getFeed : getHomepageFeed,
         postDweet : postDweet,

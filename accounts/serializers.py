@@ -18,3 +18,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         Profile.objects.create(user=u)
 
         return u
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "id"]
+
+    @property
+    def get_data(self, *args):
+        data = self.data
+        data["fullname"] = self.instance.fullname
+        return data

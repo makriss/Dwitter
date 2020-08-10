@@ -14,6 +14,9 @@ class Profile(models.Model):
     followers = models.ManyToManyField("self", through="Relationship", related_name="follow_to",
                                        through_fields=("user_followed", "followed_by"), symmetrical=False, blank=True)
 
+    def __str__(self):
+        return self.user.username
+
     def get_followers(self):
         return self.followers.all()
 

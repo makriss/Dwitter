@@ -37,7 +37,7 @@
         </div>
         <br><br>
         <div>
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <ul class="nav nav-tabs m_b" id="myTab" role="tablist">
               <li class="nav-item">
                 <a class="nav-link active" id="dweet-tab" data-toggle="tab" href="#dweet" role="tab" aria-controls="dweet" aria-selected="true">Dweet</a>
               </li>
@@ -50,7 +50,7 @@
                   <dweet ng-repeat="df in profile.userDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
                 </div>
               <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
-                  Content#2
+                  <dweet ng-repeat="df in profile.likedDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
               </div>
             </div>
         </div>

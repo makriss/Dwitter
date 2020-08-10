@@ -2,7 +2,8 @@ from datetime import datetime, timezone
 
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import F
+from django.db.models import F, Value, Count, Exists, OuterRef
+from django.db.models.functions import Concat
 
 from Dwitter import settings
 from utility.functions import get_time_difference
@@ -27,7 +28,7 @@ class Dweets(models.Model):
 
     @staticmethod
     def get_dweets_of_user(username):
-        return Dweets.objects.filter(user_id__username=username)\
+        return Dweets.objects.filter(user_id__username=username) \
             .order_by('-creation_timestamp')
 
 
@@ -51,6 +52,14 @@ class Likes(models.Model):
     last_update = models.DateTimeField(auto_now=True)
 
     @staticmethod
-    def get_liked_dweets_of_user(username):
-        return Likes.objects.filter(liked_by__username=username)\
-            .annotate(dweet=F("dweet_id__dweet")).order_by('-last_update')
+    def get_dweets_liked_by_user(username):
+        user_liked_query = Likes.objects.filter(
+            dweet_id=OuterRef('pk'), liked_by__username=username
+        )
+        return Likes.objects.filter(liked_by__username=username) \
+            .annotate(dweet=F("dweet_id__dweet"), username=F("dweet_id__user_id__username"),
+                      fullname=Concat('dweet_id__user_id__first_name', Value(' '), 'dweet_id__user_id__last_name'),
+                      likes_count=Count('dweet.likes_set.all()'),
+                      # current_user_liked=Exists(user_liked_query)
+                      ) .select_related('dweet_id').likes_set.all()\
+            .order_by('-last_update')

@@ -1,16 +1,16 @@
 from django.contrib import auth
 from django.contrib.auth import logout
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 import accounts.serializers as ser
+
+
 # Create your views here.
-from interface.forms import LoginUserForm
 
 
 # @api_view(['POST', ])
@@ -58,7 +58,7 @@ def login_user(request):
         if user is not None:
             auth.login(request, user)
             print("Login success")
-            return HttpResponse("<h3>Login Success!!!!</h3>")
+            return HttpResponseRedirect(reverse('home:homepage'))
         else:
             print("Login failed")
             # form = LoginUserForm()
@@ -69,7 +69,12 @@ def login_user(request):
 
 
 @api_view(['POST', 'GET'])
-@permission_classes([IsAuthenticated])
+def get_loggedin_user(request):
+    serialized_user = ser.UserSerializer(request.user)
+    return Response(serialized_user.get_data)
+
+
+@api_view(['POST', 'GET'])
 def logout_user(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login_user'))
+    return HttpResponseRedirect(reverse('accounts:login_user'))

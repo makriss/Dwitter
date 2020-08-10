@@ -35,13 +35,13 @@ nav.menu-navigation {
     align-content: flex-start;
 }
 nav.menu-navigation div{
-    padding: 0.7em 1.2em;
     transition: background-color 0.2s;
     border-top-left-radius: 2.1em;
     border-bottom-left-radius: 2.1em;
     border-top-right-radius: 2.1em;
     border-bottom-right-radius: 2.1em;
 }
+.nav_pad {padding: 0.7em 1.2em;}
 .div-round-border{
     border-top-left-radius: 2.1em;
     border-bottom-left-radius: 2.1em;
@@ -60,6 +60,7 @@ nav.menu-navigation a:hover{text-decoration: none;}
 .c-w{color: white;}
 .c-b{color: rgb(29,161,242,1);}
 .m_t{margin-top: 20px;}
+.m_b{margin-bottom: 10px;}
 .f_r { float: right; }
 .i_b {display: inline-block;}
 .bo_bo {border-bottom: 1px #e8f5f6 solid;}
@@ -80,3 +81,17 @@ nav.menu-navigation a:hover{text-decoration: none;}
 }
 #addDweetModal .modal-footer{ border-top: none; }
 .blue-border {border: 2px solid #e8f5f6; }
+#chevron-user-logout{
+    position: fixed;
+    z-index: 10;
+    box-shadow: rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px;
+}
+#current-user-info-holder{
+    position: fixed;
+    bottom: 0;
+    box-sizing: border-box;
+}
+#chevron-user-logout>div:last-child{
+cursor: pointer;
+}
+#chevron-user-logout>div:last-child:hover{background-color: rgb(243 243 243);}

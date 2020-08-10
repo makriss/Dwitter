@@ -1,9 +1,7 @@
-import json
-from datetime import time, datetime
-
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import F, Value, Count, Case, When, BooleanField, OuterRef, Exists
+from django.db.models import F, Value, Count, OuterRef, Exists
 from django.db.models.functions import Concat
 from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
@@ -11,21 +9,23 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
+import utility.functions as uf
 from api.models import Dweets, Likes, Comments
-from profiles.models import Profile
-from utility.functions import get_time_difference
+from .queries import dweet_feeds_query
 
 
 def login_user(request):
     return render(request, "login.html")
 
 
+@login_required
 def landing_page(request):
     return render(request, "homepage.html")
 
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
+@login_required
 def view_dweet(request, username, dweet_id):
     if request.method == "GET":
         return render(request, "comments-view.html")
@@ -35,36 +35,38 @@ def view_dweet(request, username, dweet_id):
         # time_str = datetime.datetime.strptime(time_str, '%m/%d/%Y')
         comments_object['dweet_info']['date'] = time_str.strftime("%d %b, %Y")
         comments_object['dweet_info']['time'] = time_str.strftime("%I:%M %p")
-        comments_object['dweet_info']['creation_timestamp'] = get_time_difference(time_str)
+        comments_object['dweet_info']['creation_timestamp'] = uf.get_time_difference(time_str)
 
         for comment in comments_object['comments_list']:
-            comment["creation_timestamp"] = get_time_difference(comment["creation_timestamp"])
+            comment["creation_timestamp"] = uf.get_time_difference(comment["creation_timestamp"])
 
         return Response(comments_object)
 
 
 @api_view(['POST', ])
 @permission_classes([IsAuthenticated])
-def get_homepage_feed(request):
+def get_homepage_feed(request, username=None):
     # users_followed = Profile.get_profile(request.user.id).get_followed_users()
-    u = Profile.get_profile(request.user.id)
-    users_followed = u.follow_to.all().values('user') | Profile.objects.filter(user=u.user).values("user")
-    current_user_liked_query = Likes.objects.filter(
-        dweet_id=OuterRef('pk'), liked_by=request.user
-    )
-    dweets = Dweets.objects.filter(user_id__in=users_followed) \
-        .values('id', 'dweet', 'user_id', 'creation_timestamp') \
-        .annotate(username=F("user_id__username"),
-                  fullname=Concat('user_id__first_name', Value(' '), 'user_id__last_name'),
-                  likes_count=Count('likes'), comments_count=Count('comments'),
-                  current_user_liked=Exists(current_user_liked_query)
-                  ) \
-        .order_by('-creation_timestamp')
-
-    for d in dweets:
-        d['creation_timestamp'] = get_time_difference(d['creation_timestamp'])
+    dweets = get_feed_from_db(request, username)
 
     return Response(dweets)
+
+
+def get_feed_from_db(request, username=None):
+    if not username:
+        profile_followed_list = list(request.user.profile.follow_to.all().values_list('id', flat=True)) or []
+        profile_followed_list.append(request.user.profile.id)
+        profiles_followed_str = ",".join(str(i) for i in profile_followed_list)
+    else:
+        profiles_followed_str = str(get_user_model().objects.filter(username=username).values("id")[0]['id'])
+
+    query = dweet_feeds_query.replace('__CURRENT_USER_ID__', str(request.user.id))\
+        .replace('__PROFILE_IDS__', profiles_followed_str)
+    feed = uf.dict_fetch_all(query)
+    for d in feed:
+        d['creation_timestamp'] = uf.get_time_difference(d['creation_timestamp'])
+
+    return feed
 
 
 def fetch_comments(request, username, dweet_id):
