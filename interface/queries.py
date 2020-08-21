@@ -3,7 +3,7 @@ dweet_feeds_query = """
 SELECT ad.id, ad.dweet, au.username, CASE when likes_count is NULL then 0 else likes_count end, 
 CASE when comments_count is NULL then 0 else comments_count end, 
 ad.creation_timestamp, ad.user_id, CONCAT(au.first_name,' ', au.last_name) AS "fullname",
-
+profile.profile_photo,
 EXISTS(SELECT U0.id, U0.dweet_id, U0.liked_by_id, U0.last_update FROM api_likes U0 WHERE (U0.dweet_id = ad.id
 AND U0.liked_by_id = __CURRENT_USER_ID__)) AS current_user_liked 
 

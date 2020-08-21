@@ -70,8 +70,9 @@ def login_user(request):
 
 @api_view(['POST', 'GET'])
 def get_loggedin_user(request):
-    serialized_user = ser.UserSerializer(request.user)
-    return Response(serialized_user.get_data)
+    # serialized_user = ser.UserSerializer(request.user)
+    current_user_ser = ser.CurrentUserSerializer(request.user)
+    return Response(current_user_ser.data)
 
 
 @api_view(['POST', 'GET'])

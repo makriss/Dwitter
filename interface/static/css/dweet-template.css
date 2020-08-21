@@ -1,7 +1,7 @@
 .dweet-directive{
     border: 2px solid #e8f5f6;
    /* border-radius: 20px; */
-    padding: 10px;
+    padding: 10px 0;
     margin-bottom: 10px;
 }
 .dweet-directive p>span:first-child{

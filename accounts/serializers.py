@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from Dwitter.constants import DEFAULT_PROFILE_PIC
 from profiles.models import Profile
 
 User = get_user_model()
@@ -29,4 +30,20 @@ class UserSerializer(serializers.ModelSerializer):
     def get_data(self, *args):
         data = self.data
         data["fullname"] = self.instance.fullname
+        data["profile_photo"] = self.instance.profile.profile_photo or DEFAULT_PROFILE_PIC
         return data
+
+
+class CurrentProfileSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ['profile_photo']
+
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    profile = CurrentProfileSerializer(read_only=True)
+
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name", "profile")

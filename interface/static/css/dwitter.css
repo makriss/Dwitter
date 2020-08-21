@@ -7,6 +7,7 @@ div#homepage-div>div:first-child{
     margin-bottom: 10px;
 }
 .border-radius{ border-radius: 20px;}
+.b_r2{border-radius: 50%;}
 .sky-back { background-color: rgb(29,161,242,0.1); }
 .dark-sky-back { background-color: rgb(29,161,242,1); }
 .search-box {
@@ -63,14 +64,17 @@ nav.menu-navigation a:hover{text-decoration: none;}
 .m_b{margin-bottom: 10px;}
 .f_r { float: right; }
 .i_b {display: inline-block;}
+.flex{display: flex}
 .bo_bo {border-bottom: 1px #e8f5f6 solid;}
 .bo_blue{border: 1px solid rgb(29,161,242,1.0);}
 .pad_1{ padding: 15px 5px;}
 .pad_2 {padding: 15px;}
 .pad-3 {padding: 5px 15px;}
 .v_a{vertical-align: text-bottom;}
+.v_a_t{vertical-align: top;}
 .f-bold {font-weight: bold;}
-
+.w_100 {width: 100%;}
+.t_a_r{text-align: right;}
 .dweet_font{
     font-size: 1.6em;
     font-stretch: 100%;

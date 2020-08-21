@@ -1,12 +1,17 @@
 app.directive('dweet', function(restApi){
     return {
-        restrict: 'E',
+        restrict: 'AE',
         scope: {
             dweetObj: '=data',
             comment: '&commentWindow'
         },
-        templateUrl: 'templates/dweet-template.html',
+//        templateUrl: 'templates/dweet-template.html',
+        templateUrl: function(elm, attrs) {
+            return attrs.template;
+          },
         link: function(scope, element, attrs) {
+            scope.DWEET_DP_DIMENSIONS = 49;
+
             scope.likeDweet = function(id){
                 restApi.likeDweet(id).then(function(response){
                     scope.dweetObj.current_user_liked = response.data.current_user_liked;
@@ -21,15 +26,16 @@ app.directive('dweet', function(restApi){
 
 app.directive('logoutPopup', function(restApi, $http){
     return {
-        restrict: 'E',
+        restrict: 'AE',
         scope: {
             currentUser: '=data'
-//            comment: '&commentWindow'
         },
-        templateUrl: 'templates/logout-popup.html',
+//        templateUrl: 'templates/logout-popup.html',
+        templateUrl: function(elm, attrs) {
+            return attrs.template;
+          },
         link: function(scope, elm, attrs) {
-            console.log(elm.children()[1])
-
+            scope.PROFILE_DP_DIMENSIONS = 39;
             scope.showPopup = false;
 
             scope.togglePopup = function(){
@@ -38,24 +44,14 @@ app.directive('logoutPopup', function(restApi, $http){
                     scope.showPopup = true;
                     parent = $(elm.children()[0]);
                     popup = $(elm.children()[1]);
-//                    popup.css(
-//                        { top: parent.offset().top - parent.height() - 10 },
-//                        { left: parent.offset().left  }
-//                    )
-                    console.log(parent.outerHeight());
                     popup.css('bottom', parent.outerHeight());
                 }
                     else
                         scope.showPopup = false;
-
-
-
             }
-
 
             scope.logoutUser = function(){
                 $http.post('/accounts/logout').then(function(result){
-                    console.log(result);
                 })
             }
 
@@ -97,6 +93,10 @@ app.factory('restApi', function($http){
         return $http.post('/profile/follow-user',{'follow_username':username})
     }
 
+    function editProfile(data){
+        return $http.post('/profile/edit-profile', {'profile_data': data})
+    }
+
     return {
         getCurrentUser: getCurrentUser,
         likeDweet : likeDweet,
@@ -105,6 +105,7 @@ app.factory('restApi', function($http){
         comment: commentOnDweet,
         commentsView: commentsViewData,
         getUserProfile: getUserProfile,
-        followUser: followUser
+        followUser: followUser,
+        editProfile: editProfile
     }
 })

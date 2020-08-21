@@ -1,4 +1,5 @@
 {% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
 <!--    <script src="https://code.angularjs.org/1.2.32/angular-sanitize.min.js"></script>-->
     <script src="{% static 'js/angularCtrl.js' %}"></script>
     <script src="{% static 'js/angularServices.js' %}"></script>
-    <base href="{% static '/'%}" />
+<!--    <base href="{% static '/'%}" />-->
 </head>
 <body ng-app="dwitterAngularModule">
 <div ng-controller="dwitterCtrl" id="homepage-div">
@@ -38,7 +39,7 @@
 <!--                  </div>-->
 <!--                </div>-->
                 <div id="search-box-div">
-                    <div><img src='libraries/octicons/icons/mention-16.svg' alt="icon name"></div>
+                    <div><img src='{{STATIC_PREFIX}}libraries/octicons/icons/mention-16.svg' alt="icon name"></div>
                     <div><input type="text" class="sky-back search-box" placeholder="Search Dwitter"></div>
                 </div>
             </div>
@@ -59,19 +60,19 @@
 <!--                    </a>-->
                     <a class="options-menu-item" href="/home">
                         <div class="nav_pad">
-                            <img ng-src="libraries/octicons/icons/home-24.svg" alt="home">
+                            <img ng-src="{{STATIC_PREFIX}}libraries/octicons/icons/home-24.svg" alt="home">
                             &nbsp; <span>Home</span>
                         </div>
                     </a>
                     <a class="options-menu-item">
                         <div class="nav_pad">
-                            <img ng-src="libraries/octicons/icons/bookmark-24.svg" alt="bookmark">
+                            <img ng-src="{{STATIC_PREFIX}}libraries/octicons/icons/bookmark-24.svg" alt="bookmark">
                             &nbsp; <span>Bookmark</span>
                         </div>
                     </a>
                     <a class="options-menu-item" ng-href="/profile/[[currentUser.username]]">
                         <div class="nav_pad">
-                            <img ng-src="libraries/octicons/icons/person-24.svg" alt="person">
+                            <img ng-src="{{STATIC_PREFIX}}libraries/octicons/icons/person-24.svg" alt="person">
                             &nbsp; <span>Profile</span>
                         </div>
                     </a>
@@ -81,8 +82,8 @@
                         </div>
                     </a>
                 </nav>
-
-                <logout-popup data="currentUser"></logout-popup>
+<!--                <script id="templates/logout-popup.html" type="text/ng-template"></script>-->
+                <logout-popup template="{{STATIC_PREFIX}}templates/logout-popup.html" data="currentUser"></logout-popup>
 
 
 

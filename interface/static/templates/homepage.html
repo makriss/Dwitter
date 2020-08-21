@@ -1,13 +1,13 @@
 {% extends 'index.html' %}
 {% load static %}
-
+{% get_static_prefix as STATIC_PREFIX %}
 {% block content %}
     <div ng-init="homepageInit()">
-    <dweet ng-repeat="df in dweetsFeed" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
+    <dweet template="{{STATIC_PREFIX}}templates/dweet-template.html" ng-repeat="df in dweetsFeed" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
 
 
     <!-- Add Dweet Modal -->
-    <div ng-include="'templates/add_dweet_modal.html'"></div>
+    <div ng-include="'{{STATIC_PREFIX}}templates/add_dweet_modal.html'"></div>
 
     <div class="modal fade" id="commentDweetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -19,10 +19,10 @@
             </button>
           </div>
           <div class="modal-body">
-            <div ng-include="'templates/dweet-msg-template.html'"></div>
+            <div ng-include="'{{STATIC_PREFIX}}templates/dweet-msg-template.html'"></div>
               <div class="font-light">Replying to
                   <span class="font-light">
-                    <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+                    <img src='{{STATIC_PREFIX}}libraries/octicons/icons/mention-16.svg' alt="icon name">
                     <span ng-bind="dweetObj.username"></span>
                 </span> &nbsp;
               </div>

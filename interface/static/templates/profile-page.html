@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 {% load static %}
-
+{% get_static_prefix as STATIC_PREFIX %}
 {% block content %}
 
 <div ng-controller="profileCtrl">
@@ -10,9 +10,15 @@
     <div>
         <div style="clear:both;">
 <!--            <img> Profile Pic-->
-            <a class="m_t" >
+            <img class="b_r2" ng-src="{% get_media_prefix %}[[profile.userInfo.profile_photo]]" width="[[PROFILE_DP_DIMENSIONS]]" height="[[PROFILE_DP_DIMENSIONS]]">
+            <a class="m_t" ng-if="showFollowBtn">
                 <div class="i_b pad-3 f-bold f_r dweet-btn div-round-border" ng-class="classesArr.classes" ng-click="followUser(profile.userInfo.username)">
                     <span ng-bind="classesArr.btnText"></span>
+                </div>
+            </a>
+            <a class="m_t" ng-if="!showFollowBtn">
+                <div class="i_b pad-3 f-bold f_r dweet-btn div-round-border dark-sky-back c-w" data-toggle="modal" data-target="#updateProfileModal">
+                    <span>Update Profile</span>
                 </div>
             </a>
         </div>
@@ -20,7 +26,7 @@
             <div ng-bind="profile.userInfo.fullname"></div>
             <div>
                 <span class="font-light">
-                    <img src='libraries/octicons/icons/mention-16.svg' alt="icon name">
+                    <img src='{{STATIC_PREFIX}}libraries/octicons/icons/mention-16.svg' alt="icon name">
                     <span ng-bind="profile.userInfo.username"></span>
                 </span>
             </div>
@@ -32,7 +38,7 @@
             <div class="i_b">
                 <span ng-bind="profile.userInfo.following"></span> Following
                 &nbsp;
-                <span ng-bind="profile.userInfo.followers"></span> Followers
+                <span ng-bind="profile.userInfo.followers_count"></span> Followers
             </div>
         </div>
         <br><br>
@@ -47,13 +53,50 @@
             </ul>
             <div class="tab-content" id="myTabContent">
               <div class="tab-pane fade show active" id="dweet" role="tabpanel" aria-labelledby="dweet-tab">
-                  <dweet ng-repeat="df in profile.userDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
+                  <dweet template="{{STATIC_PREFIX}}templates/dweet-template.html" ng-repeat="df in profile.userDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
                 </div>
               <div class="tab-pane fade" id="likes" role="tabpanel" aria-labelledby="likes-tab">
-                  <dweet ng-repeat="df in profile.likedDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
+                 <dweet template="{{STATIC_PREFIX}}templates/dweet-template.html" ng-repeat="df in profile.likedDweets" data="df" comment-window="commentWindow(df)" ng-click="selectDweet(df)"></dweet>
               </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="updateProfileModal" tabindex="-1" role="dialog" aria-labelledby="updateProfileModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content border-radius">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left: 0;">
+              <span aria-hidden="true">&times;</span>
+            </button>
+              <button class="btn btn-primary t_a_r" ng-click="saveProfile()">Save</button>
+          </div>
+
+          <div class="modal-body">
+
+                <h5>Describe Yourself</h5>
+                <p>What makes you special?</p>
+                <textarea class="w_100" ng-model="editProfile.bio" maxlength="BIO_CHAR_LIMIT" name="bio" rows="5" cols="33"></textarea>
+                <div class="t_a_r">
+                    <span ng-bind="editProfile.bio.length || 0"></span>/<span ng-bind="BIO_CHAR_LIMIT"></span>
+                </div>
+                <br>
+                <h5>Pick a profile picture</h5>
+                <p>Have a favourite selfie? Upload it now</p>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <p>
+                        <input ng-model="editProfile.pic" id="profile_pic" type="file" class="btn" name="image">
+                    </p>
+                    <input type="submit" value="Submit" />
+                </form>
+          </div>
+
+          <div class="modal-footer">
+
+          </div>
+        </div>
+       </div>
     </div>
 </div>
 

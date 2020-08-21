@@ -10,7 +10,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_500_INTERNAL_SERVER_ERROR
 
 import utility.functions as uf
+from Dwitter.constants import DEFAULT_PROFILE_PIC
 from api.models import Dweets, Likes, Comments
+from profiles.models import Profile
 from .queries import dweet_feeds_query
 
 
@@ -58,13 +60,15 @@ def get_feed_from_db(request, username=None):
         profile_followed_list.append(request.user.profile.id)
         profiles_followed_str = ",".join(str(i) for i in profile_followed_list)
     else:
-        profiles_followed_str = str(get_user_model().objects.filter(username=username).values("id")[0]['id'])
+        # profiles_followed_str = str(get_user_model().objects.filter(username=username).values("id")[0]['id'])
+        profiles_followed_str = str(Profile.objects.filter(user__username=username).values_list("id", flat=True)[0])
 
     query = dweet_feeds_query.replace('__CURRENT_USER_ID__', str(request.user.id))\
         .replace('__PROFILE_IDS__', profiles_followed_str)
     feed = uf.dict_fetch_all(query)
     for d in feed:
         d['creation_timestamp'] = uf.get_time_difference(d['creation_timestamp'])
+        d['profile_photo'] = DEFAULT_PROFILE_PIC if not d['profile_photo'] else d['profile_photo']
 
     return feed
 

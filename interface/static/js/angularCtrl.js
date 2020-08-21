@@ -1,6 +1,7 @@
 var app = angular.module('dwitterAngularModule',[]);
 
 app.config(function($interpolateProvider, $httpProvider){
+    $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
     $interpolateProvider.startSymbol('[[').endSymbol(']]');
     $httpProvider.defaults.xsrfCookieName=  "csrftoken";
     $httpProvider.defaults.xsrfHeaderName=  "X-CSRFToken";
@@ -12,6 +13,7 @@ app.config(function($interpolateProvider, $httpProvider){
 app.controller('dwitterCtrl', ['$scope','menuItems','restApi','$window', function(scope,menuItems,restApi,$window){
     window.scope = scope;
     scope.DWEET_CHAR_LIMIT = 140;
+    scope.DWEET_DP_DIMENSIONS = 49;
     scope.currentUser = {}
     console.log("ROARING......")
     restApi.getCurrentUser().then(function(response){
@@ -123,6 +125,10 @@ app.controller('dwitterCtrl', ['$scope','menuItems','restApi','$window', functio
 app.controller('profileCtrl', ['$scope','restApi','$window', function(scope, restApi, $window){
     window.ps = scope;
     scope.profile = {};
+    scope.editProfile = {"bio":""};
+    scope.PROFILE_DP_DIMENSIONS = 134;
+    scope.BIO_CHAR_LIMIT = 160
+
     var url = $window.location.pathname;
 
     const followObject = {classes: ["c-b","bo_blue"], btnText: "Follow"},
@@ -132,7 +138,7 @@ app.controller('profileCtrl', ['$scope','restApi','$window', function(scope, res
                     scope.profile.userInfo = response.data.profile_info;
                     scope.profile.userDweets = response.data.user_dweets;
                     scope.profile.likedDweets = response.data.liked_dweets;
-                    console.log(response.data);
+//                    console.log(response.data);
                     toggleProfileFollow(response.data)
                 }, function(response){
                     console.error(response)
@@ -140,7 +146,7 @@ app.controller('profileCtrl', ['$scope','restApi','$window', function(scope, res
 
     scope.followUser = function(username){
         restApi.followUser(username).then(function(response){
-                    console.log(response.data);
+//                    console.log(response.data);
                     toggleProfileFollow(response.data)
                 }, function(response){
                     console.error(response)
@@ -159,7 +165,9 @@ app.controller('profileCtrl', ['$scope','restApi','$window', function(scope, res
         }
     }
 
-
+    scope.saveProfile = function(){
+        console.log(scope.editProfile);
+    }
 }])
 
 
